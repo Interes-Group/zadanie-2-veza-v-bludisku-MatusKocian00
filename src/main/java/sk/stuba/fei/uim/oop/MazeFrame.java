@@ -1,18 +1,18 @@
 package sk.stuba.fei.uim.oop;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+
 public class MazeFrame {
 
     static int wins = 0;
 
-
+    Mouse mouse = new Mouse();
     Board board = new Board();
     Player player = new Player(board);
     static JFrame frame;
@@ -26,6 +26,8 @@ public class MazeFrame {
         mazePanel.add(board, BorderLayout.CENTER);
         mazePanel.setFocusable(true);
         mazePanel.add(winCount, BorderLayout.SOUTH);
+        mazePanel.addMouseListener(mouse);
+        mazePanel.addMouseMotionListener(mouse);
 
 
         frame.add(mazePanel, BorderLayout.CENTER);
@@ -39,51 +41,33 @@ public class MazeFrame {
         JButton south = new JButton("South");
         south.setFocusable(false);
         infoPanel.add(south, BorderLayout.SOUTH);
-        south.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                player.moveDown(board);
-            }
-        });
+        south.addActionListener(ae -> player.moveDown(board));
 
         JButton north = new JButton("North");
         north.setFocusable(false);
         infoPanel.add(north, BorderLayout.NORTH);
-        north.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                player.moveUp(board);
-            }
-        });
+        north.addActionListener(ae -> player.moveUp(board));
 
         JButton east = new JButton("East");
         east.setFocusable(false);
         infoPanel.add(east, BorderLayout.EAST);
-        east.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                player.moveRight(board);
-            }
-        });
+        east.addActionListener(ae -> player.moveRight(board));
 
 
         JButton west = new JButton("West");
         west.setFocusable(false);
         infoPanel.add(west, BorderLayout.WEST);
-        west.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                player.moveLeft(board);
-            }
-        });
+        west.addActionListener(ae -> player.moveLeft(board));
 
         JButton menu = new JButton("New Game");
         menu.setFocusable(false);
         infoPanel.add(menu, BorderLayout.CENTER);
-        menu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+        menu.addActionListener(ae -> {
 
-                frame.dispose();
-                resetWins();
-                new MazeFrame(wins);
+            frame.dispose();
+            resetWins();
+            new MazeFrame(wins);
 
-            }
         });
 
         mazePanel.addKeyListener(new KeyAdapter()
@@ -103,10 +87,6 @@ public class MazeFrame {
 
     public int getWins() {
         return wins;
-    }
-
-    public void addWinCount() {
-        wins++;
     }
 
     public void resetWins() {

@@ -4,25 +4,16 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 
-/**
- * A board class that generates a full game board represented by
- * a 2D array of characters.
- */
-public class Board<y> extends JPanel {
+public class Board extends JPanel {
 
     private char[][] board;
     private int size;
     private int unVisited;
-    private int scale=1;
     LinkedList<Position> positionList = new LinkedList<Position>();
 
     public Board(){
        createBoard();
     }
-
-    /**
-     * The generateBoard() resets the board
-     */
     public void generateBoard(){
         for (int i=0; i < size; i++){
             for (int k=0; k < size; k++){
@@ -45,16 +36,9 @@ public class Board<y> extends JPanel {
         generate(1,1);
     }
 
-
-    /**
-     * Modification of the paint method that correctly paints the
-     * game board on the canvas with respect to the 2D array of the
-     * maze, scaled accordingly.
-     */
     public void paint(Graphics g){
         super.paint(g);
-        int n = 500/(scale+10);
-
+        int n = 15;
         for(int i = 0; i < size; i++){
             for( int k = 0; k < size; k++){
                 if((board[i][k] == '#')){
@@ -74,22 +58,10 @@ public class Board<y> extends JPanel {
         }
     }
 
-    /**
-     * A function to get the value at the specified coordinates
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @return the value at the x and y coordinate.
-     */
     public char get(int x, int y){
         return board[x][y];
     }
 
-    /**
-     * A function to set the value at the specified coordinates
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param value The value to replace the existing character.
-     */
     public void set(int x, int y, char value){
         board[x][y] = value;
         repaint();
@@ -115,14 +87,6 @@ public class Board<y> extends JPanel {
     Position posList[] = new Position[(2*(getX()/2))];
     Position cC = new Position(5,5);
 
-
-    /**
-     * A function that begins to randomly generate a random
-     * maze on the game board at the specified posX and posY
-     * coordinates of the game board. Pseudocode used from Wikipedia.
-     * @param posX The x coordinates of the game board.
-     * @param posY The y coordinates of the game board.
-     */
     public void generate(int posX, int posY){
         cC = new Position(posX,posY);
         set(cC.getX(),cC.getY(), 'v');
@@ -204,7 +168,6 @@ public class Board<y> extends JPanel {
         int y = 11;
         unVisited = (x*x);
         x *= 2; y *= 2; x++; y++;
-        scale = y;
 
         board = new char [x][y];
         size = x;
