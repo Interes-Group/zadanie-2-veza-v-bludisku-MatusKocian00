@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 
 public class MazeFrame {
@@ -13,15 +14,18 @@ public class MazeFrame {
     static int wins = 0;
 
     Mouse mouse = new Mouse();
-    Board board = new Board();
-    Player player = new Player(board);
+    static Board board;
+    static Player player;
     static JFrame frame;
+    static ArrayList<Neighbour> neighbours = new ArrayList<>();
     JPanel mazePanel = new JPanel(new BorderLayout());
     JPanel infoPanel = new JPanel(new BorderLayout());
     JLabel winCount = new JLabel("Number of wins: " + getWins());
 
 
     public MazeFrame(int wins) {
+        board = new Board();
+        player = new Player(board);
         frame = new JFrame("Maze");
         mazePanel.add(board, BorderLayout.CENTER);
         mazePanel.setFocusable(true);
@@ -38,26 +42,42 @@ public class MazeFrame {
         frame.setVisible(true);
         frame.setSize(345, 475);
 
-        JButton south = new JButton("South");
-        south.setFocusable(false);
-        infoPanel.add(south, BorderLayout.SOUTH);
-        south.addActionListener(ae -> player.moveDown(board));
+        JButton down = new JButton("Down");
+        down.setFocusable(false);
+        infoPanel.add(down, BorderLayout.SOUTH);
+        down.addActionListener(ae -> {
+            board.unsetNeighbours();
+            player.moveDown(board);
 
-        JButton north = new JButton("North");
-        north.setFocusable(false);
-        infoPanel.add(north, BorderLayout.NORTH);
-        north.addActionListener(ae -> player.moveUp(board));
+        });
 
-        JButton east = new JButton("East");
-        east.setFocusable(false);
-        infoPanel.add(east, BorderLayout.EAST);
-        east.addActionListener(ae -> player.moveRight(board));
+        JButton up= new JButton("Up");
+        up.setFocusable(false);
+        infoPanel.add(up, BorderLayout.NORTH);
+        up.addActionListener(ae -> {
+            board.unsetNeighbours();
+            player.moveUp(board);
+
+        });
+
+        JButton right = new JButton("Right");
+        right.setFocusable(false);
+        infoPanel.add(right, BorderLayout.EAST);
+        right.addActionListener(ae -> {
+            board.unsetNeighbours();
+            player.moveRight(board);
+
+        });
 
 
-        JButton west = new JButton("West");
-        west.setFocusable(false);
-        infoPanel.add(west, BorderLayout.WEST);
-        west.addActionListener(ae -> player.moveLeft(board));
+        JButton left = new JButton("Left");
+        left.setFocusable(false);
+        infoPanel.add(left, BorderLayout.WEST);
+        left.addActionListener(ae -> {
+            board.unsetNeighbours();
+            player.moveLeft(board);
+
+        });
 
         JButton menu = new JButton("New Game");
         menu.setFocusable(false);
@@ -74,10 +94,22 @@ public class MazeFrame {
         {
             public void keyPressed(KeyEvent e){
                 int keyCode = e.getKeyCode();
-                if(e.getKeyChar() == 'a' || keyCode == KeyEvent.VK_LEFT) player.moveLeft(board);
-                if(e.getKeyChar() == 'd' || keyCode == KeyEvent.VK_RIGHT) player.moveRight(board);
-                if(e.getKeyChar() == 'w' || keyCode == KeyEvent.VK_UP) player.moveUp(board);
-                if(e.getKeyChar() == 's' || keyCode == KeyEvent.VK_DOWN) player.moveDown(board);
+                if(e.getKeyChar() == 'a' || keyCode == KeyEvent.VK_LEFT) {
+                    player.moveLeft(board);
+                    board.unsetNeighbours();
+                }
+                if(e.getKeyChar() == 'd' || keyCode == KeyEvent.VK_RIGHT) {
+                    player.moveRight(board);
+                    board.unsetNeighbours();
+                }
+                if(e.getKeyChar() == 'w' || keyCode == KeyEvent.VK_UP) {
+                    player.moveUp(board);
+                    board.unsetNeighbours();
+                }
+                if(e.getKeyChar() == 's' || keyCode == KeyEvent.VK_DOWN) {
+                    player.moveDown(board);
+                    board.unsetNeighbours();
+                }
             }
         });
 
@@ -92,4 +124,5 @@ public class MazeFrame {
     public void resetWins() {
         wins = 0;
     }
+
 }

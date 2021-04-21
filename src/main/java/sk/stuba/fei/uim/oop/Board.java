@@ -2,6 +2,8 @@ package sk.stuba.fei.uim.oop;
 
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Board extends JPanel {
@@ -10,6 +12,7 @@ public class Board extends JPanel {
     private int size;
     private int unVisited;
     LinkedList<Position> positionList = new LinkedList<Position>();
+
 
     public Board(){
        createBoard();
@@ -54,9 +57,38 @@ public class Board extends JPanel {
                     g.setColor(Color.blue);
                     g.fillRect(i*n, k*n, n-1, n-1);
                 }
+                else if (board[i][k]=='n') {
+                    g.setColor(Color.green);
+                    g.fillRect(i * n, k * n, n - 1, n - 1);
+                }
             }
         }
     }
+
+    public void setNeighbours(){
+        for (Neighbour element: MazeFrame.player.getNeighbours()){
+            if (get(element.getX(),element.getY())!='X' && get(element.getX(),element.getY())!='8'){
+                set(element.getX(), element.getY(), 'n');
+            }
+        }
+    }
+    public void unsetNeighbours(){
+        for (Neighbour element: MazeFrame.player.getNeighbours()){
+            if (get(element.getX(),element.getY())!='X' && get(element.getX(),element.getY())!='8'){
+                set(element.getX(), element.getY(), 'v');
+            }
+        }
+    }
+    public boolean checkInNeighbours(int x, int y){
+        for (Neighbour element: MazeFrame.player.getNeighbours()){
+            if (x == element.getX() && y == element.getY()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public char get(int x, int y){
         return board[x][y];
@@ -128,7 +160,7 @@ public class Board extends JPanel {
                 }
             }
 
-            else if((random == 2) && (direction[2] == 'u')){ //South
+            else if((random == 2) && (direction[2] == 'u')){
                 if (get(cC.getX()+1,cC.getY()) != '#'){
                     set(cC.getX()+1, cC.getY(), 'v');
                     cC = new Position(cC.getX()+2, cC.getY());
@@ -139,7 +171,7 @@ public class Board extends JPanel {
 
                 }
             }
-            else if((random == 3) && (direction[3] == 'u')){ //North
+            else if((random == 3) && (direction[3] == 'u')){
                 if (get(cC.getX()-1,cC.getY()) != '#'){
                     set(cC.getX()-1, cC.getY(), 'v');
                     cC = new Position(cC.getX()-2, cC.getY());
@@ -175,4 +207,16 @@ public class Board extends JPanel {
         generateBoard();
 
     }
+
+    public void printBoard(){
+        for (int i=0; i < size; i++){
+            for (int k=0; k < size; k++){
+                System.out.print(board[k][i]);
+                System.out.print(" ");
+            }
+            System.out.println("");
+        }
+    }
+
+
 }
